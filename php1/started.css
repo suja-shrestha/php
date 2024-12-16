@@ -1,0 +1,19 @@
+.sujal {
+  background: transparent;
+  width: auto;
+  height: auto;
+  border-radius: 4px;
+  transition: 0.2s;
+  font-weight: 500;
+}
+.sujal:active {
+  background: black;
+  color: white;
+}
+.sujal1 {
+  transition: 0.2s;
+  cursor: pointer;
+}
+.sujal1:hover {
+  color: aqua;
+}

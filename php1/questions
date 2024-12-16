@@ -1,0 +1,7 @@
+1: wap to check if given number is even or odd using if statement;
+2: wap to use switch statement to determine the day of the week besed on numerical inout (1.for monday 2.for tuesday, etc.);
+3: wap to check whether given year is leap year or not;
+4: wap to check if the number is positive or negative;
+5: wap to calculate electric bill following the rules from your electricity operation;
+   (<=20,rs30>)(20 to 50 , unit * 12) (50 to 100, unit * 15>10, unit * 20);
+6: wap to calculate the root of a wuadritic equation;
