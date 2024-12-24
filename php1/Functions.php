@@ -43,22 +43,26 @@
     <ol>
         <li>
             <div class="task">
-                <h1>FUNCTION </h1><?php
-                                class Functions
-                                {
-                                    public $name;
-                                    public $age;
-                                    public $email;
-                                }
+                <h1>FUNCTION </h1>
+                <?php
+                class Functions
+                {
+                    public $name;
+                    public $age;
+                    public $email;
+                }
 
-                                $ref = new Functions();
-                                $ref->name = "sujal";
-                                $ref->age = 14;
-                                $ref->email = "shresthasujal949@gmail.com";
-                                echo $ref->$name;
-                                echo $ref->$age;
-                                echo $ref->$email;
-                                ?></div>
+                $ref = new Functions();
+                $ref->name = "sujal";
+                $ref->age = 14;
+                $ref->email = "shresthasujal949@gmail.com";
+
+                echo $ref->name . "<br>";
+                echo $ref->age . "<br>";
+                echo $ref->email;
+                ?>
+
+            </div>
         </li>
     </ol>
 
