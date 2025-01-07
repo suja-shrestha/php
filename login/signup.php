@@ -1,25 +1,24 @@
-<?php 
+<?php
 session_start();
 include('connection.php');
 include('function.php');
 //check if the user has clicked in the post button
 
-if($_SERVER['REQUEST_METHOD']=='POST'){
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $user_name = $_POST['user_name'];
-    $password =$_POST['password'];
-
-    if(!empty($user_name) && !empty($password) && !is_numeric($user_name)){
+    $password = $_POST['password'];
+    $hash = password_hash($password, PASSWORD_BCRYPT);
+    if (!empty($user_name) && !empty($password) && !is_numeric($user_name)) {
 
         //save to database'
         $user_id = random_num(20);
-        $query = "insert into users (user_id,user_name,password) values ('$user_id','$user_name','$password')";
+        $query = "insert into users (user_id,user_name,password) values ('$user_id','$user_name','$hash')";
 
         mysqli_query($con, $query);
         header("Location: login.php");
         die;
-    }
-    else{
+    } else {
         echo 'please enter some valid information';
     }
 }
@@ -31,6 +30,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -95,7 +95,8 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 60px; /* Adjust to avoid overlap with navbar */
+            margin-top: 60px;
+            /* Adjust to avoid overlap with navbar */
         }
 
         .login-container {
@@ -183,6 +184,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="logo">MyBrand</div>
@@ -205,7 +207,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
                     <label for="pass">Password</label>
                     <input type="password" id="pass" placeholder="Enter your password" name="password" required>
                 </div>
-                
+
                 <button type="submit" class="login-btn">Login</button>
             </form>
             <a href="forgot.php" class="forgot-password">Forgot Password?</a>
@@ -213,4 +215,5 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
         </div>
     </div>
 </body>
+
 </html>

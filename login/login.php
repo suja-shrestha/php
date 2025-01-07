@@ -1,4 +1,4 @@
-<?php 
+<?php
 session_start();
 include('connection.php');
 include('function.php');
@@ -8,38 +8,60 @@ $message = "";
 
 // Check if the user has clicked the post button
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $user_name = trim($_POST['user_name']);
-    $password = trim($_POST['password']);
+    $user_name = $con->real_escape_string($_POST['user_name']);
+    $password = $con->real_escape_string($_POST['password']);
 
     if (!empty($user_name) && !empty($password) && !is_numeric($user_name)) {
         // Query the database
         $query = "SELECT * FROM users WHERE user_name = '$user_name' LIMIT 1";
         $result = mysqli_query($con, $query);
 
-        if ($result) {
-            if (mysqli_num_rows($result) > 0) {
-                $user_data = mysqli_fetch_assoc($result);
-                if ($user_data['password'] === $password) {
-                    $_SESSION['user_id'] = $user_data['user_id'];
-                    header("Location: index.php");
-                    exit;
-                } else {
-                    $message = "Wrong password!";
-                }
-            } else {
-                $message = "User not found!";
-            }
+    //     if ($result) {
+    //         if (mysqli_num_rows($result) > 0) {
+    //             $user_data = mysqli_fetch_assoc($result);
+    //             if ($user_data['password'] === $password) {
+    //                 $_SESSION['user_id'] = $user_data['user_id'];
+    //                 header("Location: index.php");
+    //                 exit;
+    //             } else {
+    //                 $message = "Wrong password!";
+    //             }
+    //         } else {
+    //             $message = "User not found!";
+    //         }
+    //     } else {
+    //         $message = "Database query failed: " . mysqli_error($con);
+    //     }
+    //  else {
+    //     $message = "Please enter valid information.";
+    // }
+    if ($result) {
+        if (mysqli_num_rows($result) > 0) {
+        $user_data = mysqli_fetch_assoc($result);
+        if (password_verify($password, $user_data['password'])) {
+            $_SESSION['user_id'] = $user_data['user_id'];
+            header("Location: index.php");
+            exit;
         } else {
-            $message = "Database query failed: " . mysqli_error($con);
+            $message = "Wrong password!";
+        }
+        } else {
+        $message = "User not found!";
         }
     } else {
-        $message = "Please enter valid information.";
+        $message = "Database query failed: " . mysqli_error($con);
     }
-}
+    } else {
+    $message = "Please enter valid information.";
+    }
+    }
+
+
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -104,7 +126,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-top: 60px; /* Adjust to avoid overlap with navbar */
+            margin-top: 60px;
+            /* Adjust to avoid overlap with navbar */
         }
 
         .login-container {
@@ -207,6 +230,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     </style>
 </head>
+
 <body>
     <nav class="navbar">
         <div class="logo">MyBrand</div>
@@ -220,7 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container">
         <div class="login-container">
             <h1>Login</h1>
-            
+
             <!-- Display the message if it exists -->
             <?php if (!empty($message)): ?>
                 <div class="message error"><?php echo htmlspecialchars($message); ?></div>
@@ -235,7 +259,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <label for="pass">Password</label>
                     <input type="password" id="pass" placeholder="Enter your password" name="password" required>
                 </div>
-                
+
                 <button type="submit" class="login-btn">Login</button>
             </form>
             <a href="forgot.php" class="forgot-password">Forgot Password?</a>
@@ -243,4 +267,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </div>
     </div>
 </body>
+
 </html>
