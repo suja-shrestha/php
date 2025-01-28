@@ -137,6 +137,8 @@ $conn->close();
             border: 1px solid black;
         }
 
+
+        
         th, td {
             padding: 8px;
             text-align: left;
