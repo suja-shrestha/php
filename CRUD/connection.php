@@ -24,14 +24,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (isset($_POST['create'])) {
         $sql = "INSERT INTO user1 (Name, Address, Gender, Department, Action) VALUES ('$name', '$address', '$gender', '$department', '$action')";
         if ($conn->query($sql) === TRUE) {
-            $message = "<p style='color: green;'>New record created successfully</p>";
+            $sn = $conn->insert_id;
+            $message = "<p style='color: green;'>New record created successfully. Your SN is $sn. Please remember it to read your record.</p>";
         } else {
             $message = "<p style='color: red;'>Error: " . $sql . "<br>" . $conn->error . "</p>";
         }
     }
 
     if (isset($_POST['read'])) {
-        $sql = "SELECT * FROM user1";
+        $sn = $_POST['sn'];
+        $sql = "SELECT * FROM user1 WHERE SN='$sn'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $message = "<table border='1'><tr><th>SN</th><th>Name</th><th>Address</th><th>Gender</th><th>Department</th><th>Action</th></tr>";
@@ -40,12 +42,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
             $message .= "</table>";
         } else {
-            $message = "<p style='color: red;'>0 results</p>";
+            $message = "<p style='color: red;'>No matching records found</p>";
         }
     }
 
     if (isset($_POST['update'])) {
-        $sql = "UPDATE user1 SET Address='$address', Gender='$gender', Department='$department', Action='$action' WHERE Name='$name'";
+        $sn = $_POST['sn'];
+        $sql = "UPDATE user1 SET Address='$address', Gender='$gender', Department='$department', Action='$action' WHERE SN='$sn'";
         if ($conn->query($sql) === TRUE) {
             $message = "<p style='color: green;'>Record updated successfully</p>";
         } else {
@@ -54,16 +57,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 
     if (isset($_POST['delete'])) {
-        $sql = "DELETE FROM user1 WHERE Name='$name'";
+        $sn = $_POST['sn'];
+        $name = $_POST['name'];
+        $sql = "DELETE FROM user1 WHERE SN='$sn' AND Name='$name'";
         if ($conn->query($sql) === TRUE) {
-            $message = "<p style='color: green;'>Record deleted successfully</p>";
+            $message = "<p style='color: green;'>All matching records deleted successfully</p>";
         } else {
-            $message = "<p style='color: red;'>Error deleting record: {$conn->error}</p>";
+            $message = "<p style='color: red;'>Error deleting records: {$conn->error}</p>";
         }
     }
-}
-
 $conn->close();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -137,8 +141,6 @@ $conn->close();
             border: 1px solid black;
         }
 
-
-        
         th, td {
             padding: 8px;
             text-align: left;
@@ -150,11 +152,12 @@ $conn->close();
 <body>
     <h2>CRUD Operations</h2>
     <form method="post" action="">
-        Name: <input type="text" name="name" required><br>
-        Address: <input type="text" name="address" required><br>
-        Gender: <input type="text" name="gender" required><br>
-        Department: <input type="text" name="department" required><br>
-        Action: <input type="text" name="action" required><br>
+        SN: <input type="text" name="sn"><br>
+        Name: <input type="text" name="name" ><br>
+        Address: <input type="text" name="address" ><br>
+        Gender: <input type="text" name="gender" ><br>
+        Department: <input type="text" name="department"><br>
+        Action: <input type="text" name="action"><br>
         <input type="submit" name="create" value="Create">
         <input type="submit" name="read" value="Read">
         <input type="submit" name="update" value="Update">
